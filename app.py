@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 # Incorporate data
 df = pd.read_csv('https://raw.githubusercontent.com/yatinlakkaraju123/post-scrapping/main/linkedinscrapper/data/postspider/postspider_2023-07-05T10-57-40.csv')
-
+df.drop(df.columns[[0,1,3]],axis=1,inplace=True)
 # Initialize the app
 app = Dash(__name__)
 
