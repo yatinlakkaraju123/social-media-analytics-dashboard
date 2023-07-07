@@ -12,7 +12,7 @@ app = Dash(__name__)
 app.layout = html.Div([
     html.Div(children='LINKEDIN DASHBOARD'),
     dash_table.DataTable(data=df.to_dict('records'), page_size=10),
-    dcc.Graph(figure=px.histogram(df, x='hashtag1', y='likes', histfunc='avg'))
+    dcc.Graph(figure=px.histogram(df, x=['hashtag1','hashtag2','hashtag3','hashtag4','hashtag5','hashtag6','hashtag7','hashtag8','hashtag9','hashtag10'], y='likes', histfunc='avg'))
 ])
 
 # Run the app
