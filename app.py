@@ -4,7 +4,9 @@ import pandas as pd
 import plotly.express as px
 
 # Incorporate data
-df = pd.read_csv('https://raw.githubusercontent.com/yatinlakkaraju123/post-scrapping/main/linkedinscrapper/data/postspider/modified_file.csv')
+df2 = pd.read_csv('https://raw.githubusercontent.com/yatinlakkaraju123/post-scrapping/main/linkedinscrapper/data/postspider/modified_file.csv')
+df =pd.read_csv('https://raw.githubusercontent.com/yatinlakkaraju123/post-scrapping/main/linkedinscrapper/data/postspider/modified_file1.csv')
+df = df._append(df2, ignore_index = True)
 df.drop(df.columns[[0, 1, 3]], axis=1, inplace=True)
 
 # Reshape the data to get all hashtags
@@ -26,7 +28,9 @@ app.layout = html.Div([
     html.Div(children='LINKEDIN DASHBOARD'),
     dcc.Graph(
         figure=px.bar(top_5_hashtags, x='hashtag', y='likes'),
+        
     ),
+    
 ])
 
 # Run the app
