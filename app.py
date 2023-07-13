@@ -20,18 +20,24 @@ hashtags_likes.columns = ['hashtag', 'likes']
 hashtags_likes.sort_values(by='likes', ascending=False, inplace=True)
 top_5_hashtags = hashtags_likes.head(10)
 
+bar_color = '#A7EDE7'
+
 # Initialize the app
 app = Dash(__name__)
 
 # App layout
 app.layout = html.Div([
-    html.Div(children='LINKEDIN DASHBOARD'),
-    dcc.Graph(
-        figure=px.bar(top_5_hashtags, x='hashtag', y='likes'),
-        
+    html.Div(
+        children=[
+            html.H1('LINKEDIN DASHBOARD', style={'text-align': 'center', 'text-decoration': 'underline', 'font-family': 'Arial, sans-serif', 'margin-bottom': '20px'}),
+        ],
+        style={'margin-top': '20px'}
     ),
-    
-])
+    dcc.Graph(
+        figure=px.bar(top_5_hashtags, x='hashtag', y='likes', color_discrete_sequence=[bar_color]),
+        style={'height': '400px'}
+    ),
+], style={'max-width': '1300px', 'margin': '0 auto'})
 
 # Run the app
 if __name__ == '__main__':
