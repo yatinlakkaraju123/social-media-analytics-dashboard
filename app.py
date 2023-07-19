@@ -51,13 +51,8 @@ app = Dash(__name__)
 # App layout
 app.layout = html.Div([
     # Add the LinkedIn logo and align it to the left
-    html.Img(src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjoFrGy1SjTOXrd0EbOvODvgiI0dVRY2bESA&usqp=CAU', style={'width': '300px', 'float': 'left'}),
-html.Div(
-        children=[
-            html.H1('dashboard', style={'text-align': 'right', 'font-family': 'Arial, sans-serif', 'margin-bottom': '10px'}),
-        ],
-        style={'margin-top': '80px'}
-    ),
+    html.Img(src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjoFrGy1SjTOXrd0EbOvODvgiI0dVRY2bESA&usqp=CAU', style={'width': '300px', }),
+
     dcc.Graph(
         figure=px.bar(top_5_hashtags, x='hashtag', y='likes', color_discrete_sequence=[bar_color]),
         style={'height': '400px', 'margin-top': '80px'}  # Adjust the margin-top value as needed
