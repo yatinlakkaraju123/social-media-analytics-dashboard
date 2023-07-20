@@ -39,8 +39,8 @@ top_5_posts_for_fourth_most = df[df['hashtag1'] == fourth_most_liked_hashtag].nl
 fifth_most_liked_hashtag =top_5_hashtags.iloc[4].hashtag
 top_5_posts_for_fifth_most = df[df['hashtag1'] == fifth_most_liked_hashtag].nlargest(5, 'likes')['post']
 
-
-
+#hashtags_likes_1 = hashtags_likes
+#hashtags_likes_1.loc[hashtags_likes_1['likes']<likes_top_5[4],'hashtag'] = 'Other hashtags'
 
 
 bar_color = '#A7EDE7'
@@ -56,6 +56,11 @@ app.layout = html.Div([
     dcc.Graph(
         figure=px.bar(top_5_hashtags, x='hashtag', y='likes', color_discrete_sequence=[bar_color]),
         style={'height': '400px', 'margin-top': '80px'}  # Adjust the margin-top value as needed
+    ),
+    dcc.Graph(
+       
+        figure=px.pie(hashtags_likes,values='likes',names='hashtag',title='pie chart',hole=.3),
+        style = {'height':'300px'}
     ),
 
 html.Div(children=hashtags_top_5[0]+"\t"+"\t"+str(likes_top_5[0])),
@@ -73,6 +78,8 @@ html.Div(children=hashtags_top_5[0]+"\t"+"\t"+str(likes_top_5[0])),
     html.Ul([html.Li(html.A(post,href=post)) for post in top_5_posts_for_fourth_most]),
                html.H2('Top 5 Posts of Fifth Most Liked Hashtag'),
     html.Ul([html.Li(html.A(post,href=post)) for post in top_5_posts_for_fifth_most]),
+
+
   
 ], style={'max-width': '1300px', 'margin': '0 auto'})
 
