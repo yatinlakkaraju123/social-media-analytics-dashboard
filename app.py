@@ -35,23 +35,29 @@ df['likes'] = df['likes'].str.replace(',', '')
 df['likes'] = pd.to_numeric(df['likes'])
 top_5_posts = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')[
     'post']
-
+top_5_posts_likes = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')['likes']
 second_most_liked_hashtag = top_5_hashtags.iloc[1].hashtag
 # df['likes'] = df['likes'].str.replace(',', '')  # Remove commas from 'likes' column
 # df['likes'] = pd.to_numeric(df['likes'])
 top_5_posts_for_second_most = df[df['hashtag1'] ==
                                  second_most_liked_hashtag].nlargest(5, 'likes')['post']
-
+top_5_posts_for_second_most_likes = df[df['hashtag1'] ==
+                                 second_most_liked_hashtag].nlargest(5, 'likes')['likes']
 third_most_liked_hashtag = top_5_hashtags.iloc[2].hashtag
 top_5_posts_for_third_most = df[df['hashtag1'] ==
                                 third_most_liked_hashtag].nlargest(5, 'likes')['post']
+top_5_posts_for_third_most_likes = df[df['hashtag1'] ==
+                                third_most_liked_hashtag].nlargest(5, 'likes')['likes']
 fourth_most_liked_hashtag = top_5_hashtags.iloc[3].hashtag
 top_5_posts_for_fourth_most = df[df['hashtag1'] ==
                                  fourth_most_liked_hashtag].nlargest(5, 'likes')['post']
+top_5_posts_for_fourth_most_likes = df[df['hashtag1'] ==
+                                 fourth_most_liked_hashtag].nlargest(5, 'likes')['likes']
 fifth_most_liked_hashtag = top_5_hashtags.iloc[4].hashtag
 top_5_posts_for_fifth_most = df[df['hashtag1'] ==
                                 fifth_most_liked_hashtag].nlargest(5, 'likes')['post']
-
+top_5_posts_for_fifth_most_likes = df[df['hashtag1'] ==
+                                fifth_most_liked_hashtag].nlargest(5, 'likes')['likes']
 # hashtags_likes_1 = hashtags_likes
 # hashtags_likes_1.loc[hashtags_likes_1['likes']<likes_top_5[4],'hashtag'] = 'Other hashtags'
 combined_hashtags = pd.concat([df[col] for col in df.columns if col.startswith('hashtag')])
@@ -199,18 +205,23 @@ app.layout = html.Div([
     html.Div(children=hashtags_top_5[4]+"\t"+"\t"+str(likes_top_5[4])),
     html.H2('Top 5 Posts of Most Liked Hashtag'),
     html.Ul([html.Li(html.A(post, href=post)) for post in top_5_posts]),
+    html.Ul([html.Li(html.A(post)) for post in top_5_posts_likes]),
     html.H2('Top 5 Posts of Second Most Liked Hashtag'),
     html.Ul([html.Li(html.A(post, href=post))
             for post in top_5_posts_for_second_most]),
+            html.Ul([html.Li(html.A(post)) for post in top_5_posts_for_second_most_likes]),
     html.H2('Top 5 Posts of Third Most Liked Hashtag'),
     html.Ul([html.Li(html.A(post, href=post))
             for post in top_5_posts_for_third_most]),
+    html.Ul([html.Li(html.A(post)) for post in top_5_posts_for_third_most_likes]),
     html.H2('Top 5 Posts of Fourth Most Liked Hashtag'),
     html.Ul([html.Li(html.A(post, href=post))
             for post in top_5_posts_for_fourth_most]),
+            html.Ul([html.Li(html.A(post)) for post in top_5_posts_for_fourth_most_likes]),
     html.H2('Top 5 Posts of Fifth Most Liked Hashtag'),
     html.Ul([html.Li(html.A(post, href=post))
             for post in top_5_posts_for_fifth_most]),
+            html.Ul([html.Li(html.A(post)) for post in top_5_posts_for_fifth_most_likes]),
 
  
                  dcc.Graph(
@@ -229,4 +240,5 @@ app.layout = html.Div([
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True)
+
 
