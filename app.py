@@ -68,11 +68,91 @@ card = dbc.Card(
 
         dbc.CardBody(
             [
-                html.H4("Top 5 hashtags", className="card-title"),
+                
                 
                 html.Div(
                     html.Div(
                         children=hashtags_top_5[0]+"\t"+"\t"+str(likes_top_5[0])),
+                    
+                        className="card-text",
+                ),
+
+
+            ]
+        ),
+    ],
+    style={"width": "18rem"},
+)
+card1 = dbc.Card(
+    [
+
+        dbc.CardBody(
+            [
+                
+                
+                html.Div(
+                    html.Div(
+                        children=hashtags_top_5[1]+"\t"+"\t"+str(likes_top_5[1])),
+                    
+                        className="card-text",
+                ),
+
+
+            ]
+        ),
+    ],
+    style={"width": "18rem"},
+)
+card2 = dbc.Card(
+    [
+
+        dbc.CardBody(
+            [
+                
+                
+                html.Div(
+                    html.Div(
+                        children=hashtags_top_5[2]+"\t"+"\t"+str(likes_top_5[2])),
+                    
+                        className="card-text",
+                ),
+
+
+            ]
+        ),
+    ],
+    style={"width": "18rem"},
+)
+card3 = dbc.Card(
+    [
+
+        dbc.CardBody(
+            [
+                
+                
+                html.Div(
+                    html.Div(
+                        children=hashtags_top_5[3]+"\t"+"\t"+str(likes_top_5[3])),
+                    
+                        className="card-text",
+                ),
+
+
+            ]
+        ),
+    ],
+    style={"width": "18rem"},
+)
+card4 = dbc.Card(
+    [
+
+        dbc.CardBody(
+            [
+               
+                
+                html.Div(
+                    html.Div(
+                        children=hashtags_top_5[4]+"\t"+"\t"+str(likes_top_5[4])),
                     
                         className="card-text",
                 ),
@@ -100,7 +180,16 @@ app.layout = html.Div([
         # Adjust the margin-top value as needed
         style={'height': '400px', 'margin-top': '80px'}
     ),
-
+       dbc.Row([dbc.Col(card, width=2),
+             ], justify="around"),
+              dbc.Row([dbc.Col(card1, width=2),
+             ], justify="around"),
+              dbc.Row([dbc.Col(card2, width=2)
+             ], justify="around"),
+              dbc.Row([dbc.Col(card3, width=2),
+             ], justify="around"),
+              dbc.Row([dbc.Col(card4, width=2),
+             ], justify="around"),
 
 
     html.Div(children=hashtags_top_5[0]+"\t"+"\t"+str(likes_top_5[0])),
@@ -123,8 +212,7 @@ app.layout = html.Div([
     html.Ul([html.Li(html.A(post, href=post))
             for post in top_5_posts_for_fifth_most]),
 
-    dbc.Row([dbc.Col(card, width=3),
-             ], justify="around"),
+ 
                  dcc.Graph(
         id='top-10-hashtags-pie',
         figure={
