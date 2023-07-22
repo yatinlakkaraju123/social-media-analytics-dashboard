@@ -35,32 +35,34 @@ df['likes'] = df['likes'].str.replace(',', '')
 df['likes'] = pd.to_numeric(df['likes'])
 top_5_posts = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')[
     'post']
-top_5_posts_likes = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')['likes']
+top_5_posts_likes = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')[
+    'likes']
 second_most_liked_hashtag = top_5_hashtags.iloc[1].hashtag
 # df['likes'] = df['likes'].str.replace(',', '')  # Remove commas from 'likes' column
 # df['likes'] = pd.to_numeric(df['likes'])
 top_5_posts_for_second_most = df[df['hashtag1'] ==
                                  second_most_liked_hashtag].nlargest(5, 'likes')['post']
 top_5_posts_for_second_most_likes = df[df['hashtag1'] ==
-                                 second_most_liked_hashtag].nlargest(5, 'likes')['likes']
+                                       second_most_liked_hashtag].nlargest(5, 'likes')['likes']
 third_most_liked_hashtag = top_5_hashtags.iloc[2].hashtag
 top_5_posts_for_third_most = df[df['hashtag1'] ==
                                 third_most_liked_hashtag].nlargest(5, 'likes')['post']
 top_5_posts_for_third_most_likes = df[df['hashtag1'] ==
-                                third_most_liked_hashtag].nlargest(5, 'likes')['likes']
+                                      third_most_liked_hashtag].nlargest(5, 'likes')['likes']
 fourth_most_liked_hashtag = top_5_hashtags.iloc[3].hashtag
 top_5_posts_for_fourth_most = df[df['hashtag1'] ==
                                  fourth_most_liked_hashtag].nlargest(5, 'likes')['post']
 top_5_posts_for_fourth_most_likes = df[df['hashtag1'] ==
-                                 fourth_most_liked_hashtag].nlargest(5, 'likes')['likes']
+                                       fourth_most_liked_hashtag].nlargest(5, 'likes')['likes']
 fifth_most_liked_hashtag = top_5_hashtags.iloc[4].hashtag
 top_5_posts_for_fifth_most = df[df['hashtag1'] ==
                                 fifth_most_liked_hashtag].nlargest(5, 'likes')['post']
 top_5_posts_for_fifth_most_likes = df[df['hashtag1'] ==
-                                fifth_most_liked_hashtag].nlargest(5, 'likes')['likes']
+                                      fifth_most_liked_hashtag].nlargest(5, 'likes')['likes']
 # hashtags_likes_1 = hashtags_likes
 # hashtags_likes_1.loc[hashtags_likes_1['likes']<likes_top_5[4],'hashtag'] = 'Other hashtags'
-combined_hashtags = pd.concat([df[col] for col in df.columns if col.startswith('hashtag')])
+combined_hashtags = pd.concat(
+    [df[col] for col in df.columns if col.startswith('hashtag')])
 
 hashtags_counts = combined_hashtags.value_counts()
 
@@ -74,13 +76,13 @@ card = dbc.Card(
 
         dbc.CardBody(
             [
-                
-                
+
+
                 html.Div(
                     html.Div(
                         children=hashtags_top_5[0]+"\t"+"\t"+str(likes_top_5[0])),
-                    
-                        className="card-text",
+
+                    className="card-text",
                 ),
 
 
@@ -94,13 +96,13 @@ card1 = dbc.Card(
 
         dbc.CardBody(
             [
-                
-                
+
+
                 html.Div(
                     html.Div(
                         children=hashtags_top_5[1]+"\t"+"\t"+str(likes_top_5[1])),
-                    
-                        className="card-text",
+
+                    className="card-text",
                 ),
 
 
@@ -114,13 +116,13 @@ card2 = dbc.Card(
 
         dbc.CardBody(
             [
-                
-                
+
+
                 html.Div(
                     html.Div(
                         children=hashtags_top_5[2]+"\t"+"\t"+str(likes_top_5[2])),
-                    
-                        className="card-text",
+
+                    className="card-text",
                 ),
 
 
@@ -134,13 +136,13 @@ card3 = dbc.Card(
 
         dbc.CardBody(
             [
-                
-                
+
+
                 html.Div(
                     html.Div(
                         children=hashtags_top_5[3]+"\t"+"\t"+str(likes_top_5[3])),
-                    
-                        className="card-text",
+
+                    className="card-text",
                 ),
 
 
@@ -154,13 +156,13 @@ card4 = dbc.Card(
 
         dbc.CardBody(
             [
-               
-                
+
+
                 html.Div(
                     html.Div(
                         children=hashtags_top_5[4]+"\t"+"\t"+str(likes_top_5[4])),
-                    
-                        className="card-text",
+
+                    className="card-text",
                 ),
 
 
@@ -173,66 +175,69 @@ card4 = dbc.Card(
 # Initialize the app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 bar_chart = px.bar(top_5_hashtags, x='hashtag', y='likes',
-                      color_discrete_sequence=[bar_color])
+                   color_discrete_sequence=[bar_color])
 bar_chart.update_yaxes(title_text="No of occurences")
 # App layout
 app.layout = html.Div([
     # Add the LinkedIn logo and align it to the left
-    html.Img(src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjoFrGy1SjTOXrd0EbOvODvgiI0dVRY2bESA&usqp=CAU',
-             style={'width': '300px', }),
-
-    dcc.Graph(
+    dbc.Row([html.Img(src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjoFrGy1SjTOXrd0EbOvODvgiI0dVRY2bESA&usqp=CAU',
+             style={'width': '300px', }),], justify="around"),
+    dbc.Row([dcc.Graph(
         figure=bar_chart,
         # Adjust the margin-top value as needed
         style={'height': '400px', 'margin-top': '80px'}
-    ),
-       dbc.Row([dbc.Col(card, width=2),
-             ], justify="around"),
-              dbc.Row([dbc.Col(card1, width=2),
-             ], justify="around"),
-              dbc.Row([dbc.Col(card2, width=2)
-             ], justify="around"),
-              dbc.Row([dbc.Col(card3, width=2),
-             ], justify="around"),
-              dbc.Row([dbc.Col(card4, width=2),
-             ], justify="around"),
+    ),], justify="around"),
 
 
-    html.Div(children=hashtags_top_5[0]+"\t"+"\t"+str(likes_top_5[0])),
-    html.Div(children=hashtags_top_5[1]+"\t"+"\t"+str(likes_top_5[1])),
-    html.Div(children=hashtags_top_5[2]+"\t"+"\t"+str(likes_top_5[2])),
-    html.Div(children=hashtags_top_5[3]+"\t"+"\t"+str(likes_top_5[3])),
-    html.Div(children=hashtags_top_5[4]+"\t"+"\t"+str(likes_top_5[4])),
-    html.H2('Top 5 Posts of Most Liked Hashtag'),
+
+    dbc.Row([dbc.Col(card,),
+             ], justify="around"),
+    dbc.Row([dbc.Col(card1, ),
+             ], justify="around"),
+    dbc.Row([dbc.Col(card2, )
+             ], justify="around"),
+    dbc.Row([dbc.Col(card3,),
+             ], justify="around"),
+    dbc.Row([dbc.Col(card4, ),
+             ], justify="around"),
+    dbc.Row([    html.H2('Top 5 Posts of Most Liked Hashtag'),
     html.Ul([html.Li(html.A(post, href=post)) for post in top_5_posts]),
     html.Ul([html.Li(html.A(post)) for post in top_5_posts_likes]),
     html.H2('Top 5 Posts of Second Most Liked Hashtag'),
     html.Ul([html.Li(html.A(post, href=post))
             for post in top_5_posts_for_second_most]),
-            html.Ul([html.Li(html.A(post)) for post in top_5_posts_for_second_most_likes]),
+    html.Ul([html.Li(html.A(post))
+            for post in top_5_posts_for_second_most_likes]),
     html.H2('Top 5 Posts of Third Most Liked Hashtag'),
     html.Ul([html.Li(html.A(post, href=post))
             for post in top_5_posts_for_third_most]),
-    html.Ul([html.Li(html.A(post)) for post in top_5_posts_for_third_most_likes]),
+    html.Ul([html.Li(html.A(post))
+            for post in top_5_posts_for_third_most_likes]),
     html.H2('Top 5 Posts of Fourth Most Liked Hashtag'),
     html.Ul([html.Li(html.A(post, href=post))
             for post in top_5_posts_for_fourth_most]),
-            html.Ul([html.Li(html.A(post)) for post in top_5_posts_for_fourth_most_likes]),
+    html.Ul([html.Li(html.A(post))
+            for post in top_5_posts_for_fourth_most_likes]),
     html.H2('Top 5 Posts of Fifth Most Liked Hashtag'),
     html.Ul([html.Li(html.A(post, href=post))
             for post in top_5_posts_for_fifth_most]),
-            html.Ul([html.Li(html.A(post)) for post in top_5_posts_for_fifth_most_likes]),
+    html.Ul([html.Li(html.A(post))
+            for post in top_5_posts_for_fifth_most_likes]),
+             ], justify="around"),
 
- 
-                 dcc.Graph(
+
+ dbc.Row([   dcc.Graph(
         id='top-10-hashtags-pie',
         figure={
             'data': [
-                go.Pie(labels=top_10_hashtags.index, values=top_10_hashtags.values, hole=0.5)
+                go.Pie(labels=top_10_hashtags.index,
+                       values=top_10_hashtags.values, hole=0.5)
             ],
             'layout': go.Layout(title='Top 10 Hashtags')
         }
     )
+             ], justify="around"),
+ 
 
 
 ], style={'max-width': '1300px', 'margin': '0 auto'})
@@ -240,5 +245,4 @@ app.layout = html.Div([
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True)
-
 
