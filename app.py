@@ -177,16 +177,39 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 bar_chart = px.bar(top_5_hashtags, x='hashtag', y='likes',
                    color_discrete_sequence=[bar_color])
 bar_chart.update_yaxes(title_text="No of occurences")
+navbar = dbc.NavbarSimple(
+    children=[
+        dbc.NavItem(dbc.NavLink("Page 1", href="#")),
+   
+    ],
+    brand="NavbarSimple",
+    brand_href="#",
+    color="primary",
+    dark=True,
+)
 # App layout
 app.layout = html.Div([
     # Add the LinkedIn logo and align it to the left
+     dbc.Row([html.H1("Linkedin Posts Analytics Dashboard",
+             ),], ),
     dbc.Row([html.Img(src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjoFrGy1SjTOXrd0EbOvODvgiI0dVRY2bESA&usqp=CAU',
-             style={'width': '300px', }),], justify="around"),
+             style={'width': '300px', }),], ),
     dbc.Row([dcc.Graph(
         figure=bar_chart,
         # Adjust the margin-top value as needed
         style={'height': '400px', 'margin-top': '80px'}
     ),], justify="around"),
+    dbc.Row([   dcc.Graph(
+        id='top-10-hashtags-pie',
+        figure={
+            'data': [
+                go.Pie(labels=top_10_hashtags.index,
+                       values=top_10_hashtags.values, hole=0.5)
+            ],
+            'layout': go.Layout(title='Top 10 Hashtags')
+        }
+    )
+             ], justify="around"),
 
 
 
@@ -226,17 +249,7 @@ app.layout = html.Div([
              ], justify="around"),
 
 
- dbc.Row([   dcc.Graph(
-        id='top-10-hashtags-pie',
-        figure={
-            'data': [
-                go.Pie(labels=top_10_hashtags.index,
-                       values=top_10_hashtags.values, hole=0.5)
-            ],
-            'layout': go.Layout(title='Top 10 Hashtags')
-        }
-    )
-             ], justify="around"),
+ 
  
 
 
