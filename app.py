@@ -190,10 +190,11 @@ navbar = dbc.NavbarSimple(
 # App layout
 app.layout = html.Div([
     # Add the LinkedIn logo and align it to the left
-     dbc.Row([html.H1("Linkedin Posts Analytics Dashboard",
+     dbc.Row([html.H3("Linkedin Posts Analytics Dashboard",
              ),], ),
+               
     dbc.Row([html.Img(src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjoFrGy1SjTOXrd0EbOvODvgiI0dVRY2bESA&usqp=CAU',
-             style={'width': '300px', }),], ),
+             style={'width': '300px','margin-top': '40px' }),], ),
     dbc.Row([dcc.Graph(
         figure=bar_chart,
         # Adjust the margin-top value as needed
@@ -212,48 +213,49 @@ app.layout = html.Div([
              ], justify="around"),
 
 
-
+     dbc.Row([html.H4("Top 5 hashtags with their number of occurences",
+             ),], ),
     dbc.Row([dbc.Col(card,),
-             ], justify="around"),
+             ], justify="around",className="g-0",),
     dbc.Row([dbc.Col(card1, ),
-             ], justify="around"),
+             ], justify="around",className="g-0",),
     dbc.Row([dbc.Col(card2, )
-             ], justify="around"),
+             ], justify="around",className="g-0",),
     dbc.Row([dbc.Col(card3,),
-             ], justify="around"),
+             ], justify="around",className="g-0",),
     dbc.Row([dbc.Col(card4, ),
-             ], justify="around"),
-    dbc.Row([    html.H2('Top 5 Posts of Most Liked Hashtag'),
-    html.Ul([html.Li(html.A(post, href=post)) for post in top_5_posts]),
-    html.Ul([html.Li(html.A(post)) for post in top_5_posts_likes]),
-    html.H2('Top 5 Posts of Second Most Liked Hashtag'),
-    html.Ul([html.Li(html.A(post, href=post))
-            for post in top_5_posts_for_second_most]),
-    html.Ul([html.Li(html.A(post))
-            for post in top_5_posts_for_second_most_likes]),
-    html.H2('Top 5 Posts of Third Most Liked Hashtag'),
-    html.Ul([html.Li(html.A(post, href=post))
-            for post in top_5_posts_for_third_most]),
-    html.Ul([html.Li(html.A(post))
-            for post in top_5_posts_for_third_most_likes]),
-    html.H2('Top 5 Posts of Fourth Most Liked Hashtag'),
-    html.Ul([html.Li(html.A(post, href=post))
-            for post in top_5_posts_for_fourth_most]),
-    html.Ul([html.Li(html.A(post))
-            for post in top_5_posts_for_fourth_most_likes]),
-    html.H2('Top 5 Posts of Fifth Most Liked Hashtag'),
-    html.Ul([html.Li(html.A(post, href=post))
-            for post in top_5_posts_for_fifth_most]),
-    html.Ul([html.Li(html.A(post))
-            for post in top_5_posts_for_fifth_most_likes]),
-             ], justify="around"),
+             ], justify="around",className="g-0",),
+    dbc.Row([
+        html.H5('Top 5 Posts of Most Liked Hashtag'),
+        html.Ul([
+            html.Li([html.A(post, href=post), " (", str(likes), " likes)"]) for post, likes in zip(top_5_posts, top_5_posts_likes)
+        ]),
+        html.H5('Top 5 Posts of Second Most Liked Hashtag'),
+        html.Ul([
+            html.Li([html.A(post, href=post), " (", str(likes), " likes)"]) for post, likes in zip(top_5_posts_for_second_most, top_5_posts_for_second_most_likes)
+        ]),
+        html.H5('Top 5 Posts of Third Most Liked Hashtag'),
+        html.Ul([
+            html.Li([html.A(post, href=post), " (", str(likes), " likes)"]) for post, likes in zip(top_5_posts_for_third_most, top_5_posts_for_third_most_likes)
+        ]),
+        html.H5('Top 5 Posts of Fourth Most Liked Hashtag'),
+        html.Ul([
+            html.Li([html.A(post, href=post), " (", str(likes), " likes)"]) for post, likes in zip(top_5_posts_for_fourth_most, top_5_posts_for_fourth_most_likes)
+        ]),
+        html.H5('Top 5 Posts of Fifth Most Liked Hashtag'),
+        html.Ul([
+            html.Li([html.A(post, href=post), " (", str(likes), " likes)"]) for post, likes in zip(top_5_posts_for_fifth_most, top_5_posts_for_fifth_most_likes)
+        ]),
+    ], justify="around"),
+
+
 
 
  
  
 
 
-], style={'max-width': '1300px', 'margin': '0 auto'})
+], style={'max-width': '1300px', 'margin': '1px auto'})
 
 # Run the app
 if __name__ == '__main__':
