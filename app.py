@@ -49,7 +49,7 @@ def LinkCardMaker(LikesObject,PostsObject,UrlObject):
                         [
                             dbc.ListGroupItem(
                                 [
-                                    html.H5(post),
+                                    html.H6(post),
                                     html.Small("Likes:" + str(likes), className="text-muted"),
                                 ],
                                 href=url,action=True,
@@ -251,9 +251,15 @@ bar_chart.update_yaxes(title_text="No of occurences")
 column_width = "auto"
 
 app.layout = html.Div([
+    dbc.Row([dbc.Col([html.Header(style={'background-color': '#000', 'color': '#fff', 'text-align': 'center', 'padding': '20px', 'margin': '0'},
+                children=[
+                    html.Img(src="https://www.bostonindia.in/assets/images/logoW30y.png", alt="Logo", style={'width': '120px', 'float': 'left'}),
+                    html.H1("LinkedIn Posts Analytics Dashboard", style={'font-size': '24px', 'display': 'inline-block', 'margin-left': '10px'})
+                ]
+    ),])
+            ], ),
     #heading of the page
-    dbc.Row([dbc.Col([html.H3("Posts Analytics  Dashboard for Linkedin"),])
-            ],className="g-0" ),
+   
     # Add the LinkedIn logo and align it to the left
     dbc.Row([html.Img(src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjoFrGy1SjTOXrd0EbOvODvgiI0dVRY2bESA&usqp=CAU',
              style={'width': '300px','margin-top': '40px' }),], ),
@@ -262,8 +268,8 @@ app.layout = html.Div([
     dbc.Row([dcc.Graph(
         figure=bar_chart,
         # Adjust the margin-top value as needed
-        style={'height': '400px', 'margin-top': '80px'}
-    ),], justify="around"),
+        style={ }
+    ),], ),
 
 #the pie chart is added here
  dbc.Row([   
@@ -294,10 +300,16 @@ dbc.Row(html.H5('Top 5 Posts of Each Hashtag')),
 dbc.Row([
     dbc.Col(tabs),
 ]),
+dbc.Row([
+    dbc.Col(  html.Footer(style={'background-color': '#000', 'color': '#fff', 'text-align': 'center', 'padding': '10px', 'position': 'relative', 'bottom': '0', 'left': '0', 'width': '100%'},
+                children=[
+                    html.P(" 2023 Boston IT Solutions (India) Private Limited")
+                ]
+    )),
+]),
 
 
-
-], style={'max-width': '1300px', 'margin': '0 auto'}
+], style={ 'margin': '0 auto'}
 
 )
 
