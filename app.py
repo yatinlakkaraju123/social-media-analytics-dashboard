@@ -236,16 +236,21 @@ card8 = LinkCardMaker(top_5_posts_for_fourth_most_likes,top_5_posts_for_fourth_m
 card9 = LinkCardMaker(top_5_posts_for_fifth_most_likes,top_5_posts_for_fifth_most,top_5_urls_for_fifth_most)
 
 #making the tabs for the cards
+hashtags_top_5 = hashtags_top_5.drop_duplicates().dropna()
+
+# Print the cleaned labels to verify the changes
+
 tabs = dcc.Tabs(
     [
-        dcc.Tab(card5,label = hashtags_top_5[1]),
-        dcc.Tab(card6,label = hashtags_top_5[2]),
-        dcc.Tab(card7,label = hashtags_top_5[3]),
-        dcc.Tab(card8,label = hashtags_top_5[4]),
-        dcc.Tab(card9,label = hashtags_top_5[4]),
+        dcc.Tab(card5, label=(hashtags_top_5.iloc[0])),
+        dcc.Tab(card6, label=(hashtags_top_5.iloc[1])),
+        dcc.Tab(card7, label=(hashtags_top_5.iloc[2])),
+        dcc.Tab(card8, label=(hashtags_top_5.iloc[3])),
+        dcc.Tab(card9, label=(hashtags_top_5.iloc[4])),
     ]
-    
 )
+# Print the cleaned labels for troubleshooting
+
 #-------------------- THE LINKS CARD FOR THE PAGE HAS BEEN ADDED --------------------
 
 #Making the dash Web Page layout from here, the app variable is used for initializing the app, and then we set some parameters for our bar chart and then
