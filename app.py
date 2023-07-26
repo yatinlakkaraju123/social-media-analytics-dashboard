@@ -49,7 +49,7 @@ def CleanPostObject(PostObject):
     new_string = re.sub(pattern2, '', new_string)
     return new_string.replace("-", " ")
 #-------------------- END --------------------
-def LinkCardMaker(LikesObject,PostsObject,UrlObject):
+def LinkCardMaker(LikesObject,PostsObject,UrlObject,TimeObject):
     return  dbc.Card(
         [
             dbc.CardBody(
@@ -61,10 +61,11 @@ def LinkCardMaker(LikesObject,PostsObject,UrlObject):
                                 [
                                     #added the above method here
                                     html.H6(CleanPostObject(post)),
-                                    html.Small("Likes:" + str(likes), className="text-muted"),
+                                    html.Small("Likes:" + str(likes)+"\n", className="text-muted"),
+                                    html.Small("Posted:" + str(time)+"\t"+"ago", className="text-muted"),
                                 ],
                                 href=url,action=True,
-                                ) for post,likes,url in zip(PostsObject,LikesObject,UrlObject)
+                                ) for post,likes,url,time in zip(PostsObject,LikesObject,UrlObject,TimeObject)
                         ]   
                     )
                 ]
@@ -79,6 +80,8 @@ top_5_urls = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')[
     'post']
 top_5_posts_likes = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')[
     'likes']
+top_5_time = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')[
+    'time']
 second_most_liked_hashtag = top_5_hashtags.iloc[1].hashtag
 # df['likes'] = df['likes'].str.replace(',', '')  # Remove commas from 'likes' column
 # df['likes'] = pd.to_numeric(df['likes'])
@@ -88,6 +91,8 @@ top_5_urls_for_second_most = df[df['hashtag1'] == second_most_liked_hashtag].nla
     'post']
 top_5_posts_for_second_most_likes = df[df['hashtag1'] ==
                                        second_most_liked_hashtag].nlargest(5, 'likes')['likes']
+top_5_time_for_second_most = df[df['hashtag1'] ==
+                                       second_most_liked_hashtag].nlargest(5, 'likes')['time']
 third_most_liked_hashtag = top_5_hashtags.iloc[2].hashtag
 top_5_posts_for_third_most = df[df['hashtag1'] ==
                                 third_most_liked_hashtag].nlargest(5, 'likes')['content']
@@ -95,6 +100,8 @@ top_5_urls_for_third_most = df[df['hashtag1'] == third_most_liked_hashtag].nlarg
     'post']
 top_5_posts_for_third_most_likes = df[df['hashtag1'] ==
                                       third_most_liked_hashtag].nlargest(5, 'likes')['likes']
+top_5_time_for_third_most = df[df['hashtag1'] ==
+                                      third_most_liked_hashtag].nlargest(5, 'likes')['time']
 fourth_most_liked_hashtag = top_5_hashtags.iloc[3].hashtag
 top_5_posts_for_fourth_most = df[df['hashtag1'] ==
                                  fourth_most_liked_hashtag].nlargest(5, 'likes')['content']
@@ -102,6 +109,8 @@ top_5_urls_for_fourth_most = df[df['hashtag1'] == fourth_most_liked_hashtag].nla
     'post']
 top_5_posts_for_fourth_most_likes = df[df['hashtag1'] ==
                                        fourth_most_liked_hashtag].nlargest(5, 'likes')['likes']
+top_5_time_fourth_most = df[df['hashtag1'] ==
+                                       fourth_most_liked_hashtag].nlargest(5, 'likes')['time']
 fifth_most_liked_hashtag = top_5_hashtags.iloc[4].hashtag
 top_5_posts_for_fifth_most = df[df['hashtag1'] ==
                                 fifth_most_liked_hashtag].nlargest(5, 'likes')['content']
@@ -109,6 +118,8 @@ top_5_urls_for_fifth_most = df[df['hashtag1'] == fifth_most_liked_hashtag].nlarg
     'post']
 top_5_posts_for_fifth_most_likes = df[df['hashtag1'] ==
                                       fifth_most_liked_hashtag].nlargest(5, 'likes')['likes']
+top_5_time_for_fifth_most = df[df['hashtag1'] ==
+                                      fifth_most_liked_hashtag].nlargest(5, 'likes')['time']
 # hashtags_likes_1 = hashtags_likes
 # hashtags_likes_1.loc[hashtags_likes_1['likes']<likes_top_5[4],'hashtag'] = 'Other hashtags'
 combined_hashtags = pd.concat(
@@ -225,15 +236,15 @@ card4 = dbc.Card(
 #links for the hashtags (just change the parameters here itself, i think it would be easier this way)
 
 
-card5 = LinkCardMaker(top_5_posts_likes,top_5_posts,top_5_urls)
+card5 = LinkCardMaker(top_5_posts_likes,top_5_posts,top_5_urls,top_5_time)
 
-card6 = LinkCardMaker(top_5_posts_for_second_most_likes,top_5_posts_for_second_most,top_5_urls_for_second_most)
+card6 = LinkCardMaker(top_5_posts_for_second_most_likes,top_5_posts_for_second_most,top_5_urls_for_second_most,top_5_time_for_second_most)
 
-card7 = LinkCardMaker(top_5_posts_for_third_most_likes,top_5_posts_for_third_most,top_5_urls_for_third_most)
+card7 = LinkCardMaker(top_5_posts_for_third_most_likes,top_5_posts_for_third_most,top_5_urls_for_third_most,top_5_time_for_third_most)
 
-card8 = LinkCardMaker(top_5_posts_for_fourth_most_likes,top_5_posts_for_fourth_most,top_5_urls_for_fourth_most)
+card8 = LinkCardMaker(top_5_posts_for_fourth_most_likes,top_5_posts_for_fourth_most,top_5_urls_for_fourth_most,top_5_time_fourth_most)
 
-card9 = LinkCardMaker(top_5_posts_for_fifth_most_likes,top_5_posts_for_fifth_most,top_5_urls_for_fifth_most)
+card9 = LinkCardMaker(top_5_posts_for_fifth_most_likes,top_5_posts_for_fifth_most,top_5_urls_for_fifth_most,top_5_time_for_fifth_most)
 
 #making the tabs for the cards
 hashtags_top_5 = hashtags_top_5.drop_duplicates().dropna()
