@@ -5,13 +5,14 @@ import plotly.express as px
 import dash_bootstrap_components as dbc
 import dash
 import plotly.graph_objs as go
+import re
 from urllib.parse import urlparse
 # Incorporate data
 #Yatin if you find time then please make a README, it would make it a bit easier for the next folks who see this code to understand it -Somaansh
 df2 = pd.read_csv(
-    'https://raw.githubusercontent.com/yatinlakkaraju123/post-scrapping/main/linkedinscrapper/data/postspider/modified_file.csv')
+    'https://raw.githubusercontent.com/yatinlakkaraju123/linkedin-scrapping-latest/main/linkedinscrapper/data/postspider/modified_file_3.csv')
 df = pd.read_csv(
-    'https://raw.githubusercontent.com/yatinlakkaraju123/post-scrapping/main/linkedinscrapper/data/postspider/modified_file1.csv')
+    'https://raw.githubusercontent.com/yatinlakkaraju123/linkedin-scrapping-latest/main/linkedinscrapper/data/postspider/modified_file_4.csv')
 df = df._append(df2, ignore_index=True)
 df.drop(df.columns[[1]], axis=1, inplace=True)
 
@@ -39,6 +40,15 @@ most_liked_hashtag = top_5_hashtags.iloc[0].hashtag
 df['likes'] = df['likes'].str.replace(',', '')
 df['likes'] = pd.to_numeric(df['likes'])
 df['content'] = df['post'].apply(extract_content_from_url)
+
+#-------------------- New Function to Clean the labels for the tabs --------------------
+def CleanPostObject(PostObject):
+    pattern = r'[0-9]'
+    pattern2 = r'[A-z]*$'
+    new_string = re.sub(pattern, '', PostObject)
+    new_string = re.sub(pattern2, '', new_string)
+    return new_string.replace("-", " ")
+#-------------------- END --------------------
 def LinkCardMaker(LikesObject,PostsObject,UrlObject):
     return  dbc.Card(
         [
@@ -49,7 +59,8 @@ def LinkCardMaker(LikesObject,PostsObject,UrlObject):
                         [
                             dbc.ListGroupItem(
                                 [
-                                    html.H6(post),
+                                    #added the above method here
+                                    html.H6(CleanPostObject(post)),
                                     html.Small("Likes:" + str(likes), className="text-muted"),
                                 ],
                                 href=url,action=True,
@@ -60,6 +71,8 @@ def LinkCardMaker(LikesObject,PostsObject,UrlObject):
             ),
         ],
     )
+    
+    
 top_5_posts = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')[
     'content']
 top_5_urls = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')[
@@ -231,6 +244,7 @@ tabs = dcc.Tabs(
         dcc.Tab(card8,label = hashtags_top_5[4]),
         dcc.Tab(card9,label = hashtags_top_5[4]),
     ]
+    
 )
 #-------------------- THE LINKS CARD FOR THE PAGE HAS BEEN ADDED --------------------
 
@@ -262,7 +276,7 @@ app.layout = html.Div([
    
     # Add the LinkedIn logo and align it to the left
     dbc.Row([html.Img(src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjoFrGy1SjTOXrd0EbOvODvgiI0dVRY2bESA&usqp=CAU',
-             style={'width': '300px','margin-top': '40px' }),], ),
+             style={'width': '300px','margin-top': '40px','margin-left': '70px' }),], ), #added  a margin here as well ------------------------------
 
     #the bar graph is added here
     dbc.Row([dcc.Graph(
@@ -295,11 +309,16 @@ app.layout = html.Div([
 #             ], justify="around"),
 #    dbc.Row([dbc.Col(card4, ),
 #             ], justify="around"),
-dbc.Row(html.H5('Top 5 Posts of Each Hashtag')),
+
+#-------- Added Margins Over here as well --------
+dbc.Row([html.H5('Top 5 Posts of Each Hashtag')],style={ 'margin': '70px'}),
 
 dbc.Row([
     dbc.Col(tabs),
-]),
+],
+style={ 'margin': '70px'}
+),
+#-------- End --------
 dbc.Row([
     dbc.Col(  html.Footer(style={'background-color': '#000', 'color': '#fff', 'text-align': 'center', 'padding': '10px', 'position': 'relative', 'bottom': '0', 'left': '0', 'width': '100%'},
                 children=[
