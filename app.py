@@ -303,6 +303,17 @@ app.layout = html.Div([
         # Adjust the margin-top value as needed
         style={ }
     ),], ),
+       dbc.Row([dcc.Graph(
+        figure=px.line(top_5_hashtags, x='hashtag', y='likes',),
+        # Adjust the margin-top value as needed
+        style={ }
+    ),], ),
+      
+       dbc.Row([dcc.Graph(
+        figure=px.area(top_5_hashtags, x='hashtag', y='likes',),
+        # Adjust the margin-top value as needed
+        style={ }
+    ),], ),
 
 #the pie chart is added here
  dbc.Row([   
