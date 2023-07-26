@@ -56,13 +56,16 @@ def LinkCardMaker(LikesObject,PostsObject,UrlObject,TimeObject):
                 [   
                     #most hashtags                 
                     dbc.ListGroup(
-                        [
+                        [ 
                             dbc.ListGroupItem(
                                 [
                                     #added the above method here
-                                    html.H6(CleanPostObject(post)),
+                            html.Div([
+                                        html.H6(CleanPostObject(post)),
+                                        
+                                        html.Small("Posted:" + str(time)+"\t"+"ago", className="text-success"),
+                                    ],className="d-flex w-100 justify-content-between",),
                                     html.Small("Likes:" + str(likes)+"\n", className="text-muted"),
-                                    html.Small("Posted:" + str(time)+"\t"+"ago", className="text-muted"),
                                 ],
                                 href=url,action=True,
                                 ) for post,likes,url,time in zip(PostsObject,LikesObject,UrlObject,TimeObject)
