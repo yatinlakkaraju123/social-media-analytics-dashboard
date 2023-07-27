@@ -7,6 +7,8 @@ import dash
 import plotly.graph_objs as go
 import re
 from urllib.parse import urlparse
+import datetime
+from dateutil.relativedelta import relativedelta
 # Incorporate data
 #Yatin if you find time then please make a README, it would make it a bit easier for the next folks who see this code to understand it -Somaansh
 df2 = pd.read_csv(
@@ -49,6 +51,7 @@ def CleanPostObject(PostObject):
     new_string = re.sub(pattern2, '', new_string)
     return new_string.replace("-", " ")
 #-------------------- END --------------------
+
 def LinkCardMaker(LikesObject,PostsObject,UrlObject,TimeObject):
     return  dbc.Card(
         [
@@ -56,14 +59,13 @@ def LinkCardMaker(LikesObject,PostsObject,UrlObject,TimeObject):
                 [   
                     #most hashtags                 
                     dbc.ListGroup(
-                        [ 
+                        [
                             dbc.ListGroupItem(
                                 [
                                     #added the above method here
-                            html.Div([
+                                    html.Div([
                                         html.H6(CleanPostObject(post)),
-                                        
-                                        html.Small("Posted:" + str(time)+"\t"+"ago", className="text-success"),
+                                        html.Small(MakeTime(str(time)), className="text-success"),
                                     ],className="d-flex w-100 justify-content-between",),
                                     html.Small("Likes:" + str(likes)+"\n", className="text-muted"),
                                 ],
@@ -75,8 +77,36 @@ def LinkCardMaker(LikesObject,PostsObject,UrlObject,TimeObject):
             ),
         ],
     )
+
+#------------ Functions for Changing the Date, Use MakeTime fn ------------
+def add_weeks(n_weeks):
+    n_days = 7 * int(n_weeks)
+    dt = datetime.datetime.now()
+    date_format = '%d-%m-%Y'
+    date = dt - datetime.timedelta(days=n_days)
+    date=date.strftime(date_format)
+    return date
     
-    
+def add_months(n_months):
+    dt = datetime.datetime.now()
+    date = dt - relativedelta(months = int(n_months))
+    date_format = '%d-%m-%Y'
+    date=date.strftime(date_format)
+    return date
+
+def MakeTime(post):
+    pattern = r'[w]$'
+    pattern2 = r'[mo]\w$'
+    if(re.search(pattern, post)):
+        post = re.sub(pattern, '', post)    
+        post = add_weeks(post)                
+    else:
+        post = re.sub(pattern2, '', post)
+        post = add_months(post)
+    return post            
+
+#------------------------ Done ------------------------
+
 top_5_posts = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')[
     'content']
 top_5_urls = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')[
@@ -84,7 +114,7 @@ top_5_urls = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')[
 top_5_posts_likes = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')[
     'likes']
 top_5_time = df[df['hashtag1'] == most_liked_hashtag].nlargest(5, 'likes')[
-    'time']
+    'time']  
 second_most_liked_hashtag = top_5_hashtags.iloc[1].hashtag
 # df['likes'] = df['likes'].str.replace(',', '')  # Remove commas from 'likes' column
 # df['likes'] = pd.to_numeric(df['likes'])
@@ -132,109 +162,8 @@ hashtags_counts = combined_hashtags.value_counts()
 
 top_10_hashtags = hashtags_counts.head(10)
 
-bar_color = '#A7EDE7'
-
-# bootstrap cards
-card = dbc.Card(
-    [
-
-        dbc.CardBody(
-            [
 
 
-                html.Div(
-                    html.Div(
-                        children=hashtags_top_5[0]+"\t"+"\t"+str(likes_top_5[0])),
-
-                    className="card-text",
-                ),
-
-
-            ]
-        ),
-    ],
-    style={"width": "18rem"},
-)
-card1 = dbc.Card(
-    [
-
-        dbc.CardBody(
-            [
-
-
-                html.Div(
-                    html.Div(
-                        children=hashtags_top_5[1]+"\t"+"\t"+str(likes_top_5[1])),
-
-                    className="card-text",
-                ),
-
-
-            ]
-        ),
-    ],
-    style={"width": "18rem"},
-)
-card2 = dbc.Card(
-    [
-
-        dbc.CardBody(
-            [
-
-
-                html.Div(
-                    html.Div(
-                        children=hashtags_top_5[2]+"\t"+"\t"+str(likes_top_5[2])),
-
-                    className="card-text",
-                ),
-
-
-            ]
-        ),
-    ],
-    style={"width": "18rem"},
-)
-card3 = dbc.Card(
-    [
-
-        dbc.CardBody(
-            [
-
-
-                html.Div(
-                    html.Div(
-                        children=hashtags_top_5[3]+"\t"+"\t"+str(likes_top_5[3])),
-
-                    className="card-text",
-                ),
-
-
-            ]
-        ),
-    ],
-    style={"width": "18rem"},
-)
-card4 = dbc.Card(
-    [
-
-        dbc.CardBody(
-            [
-
-
-                html.Div(
-                    html.Div(
-                        children=hashtags_top_5[4]+"\t"+"\t"+str(likes_top_5[4])),
-
-                    className="card-text",
-                ),
-
-
-            ]
-        ),
-    ],
-    style={"width": "18rem"},
-)
 #-------------------- ADDING THE LINKS CARD FOR THE PAGE --------------------
 #links for the hashtags (just change the parameters here itself, i think it would be easier this way)
 
@@ -267,6 +196,61 @@ tabs = dcc.Tabs(
 
 #-------------------- THE LINKS CARD FOR THE PAGE HAS BEEN ADDED --------------------
 
+#-------------------- MAKING CARDS FOR THE GRAPHS TO ADD THEM AS TABS --------------------
+bar_color = '#0077B5' #Colour for the charts to stay consistent with the page
+
+
+    #Bar Graph is added here
+bar_chart = px.bar(top_5_hashtags, x='hashtag', y='likes',
+                   color_discrete_sequence=[bar_color]).update_yaxes(title_text="No of occurences")
+BarChart_card = dbc.Card([
+    dcc.Graph(
+    figure=px.bar(top_5_hashtags, x='hashtag', y='likes',color_discrete_sequence=[bar_color]).update_yaxes(title_text="No of occurences"),
+    # Adjust the margin-top value as needed
+    style={ }
+    )
+])
+    #Line Graph Added Here
+LineGraph_card = dbc.Card([
+    dcc.Graph(
+    figure=px.line(top_5_hashtags, x='hashtag', y='likes',color_discrete_sequence=[bar_color]),
+    # Adjust the margin-top value as needed
+    style={ }
+    )  
+])
+
+AreaGraph_card = dbc.Card([
+    dcc.Graph(
+    figure=px.area(top_5_hashtags, x='hashtag', y='likes',color_discrete_sequence=[bar_color]),
+    # Adjust the margin-top value as needed
+    style={ }
+    )
+])
+
+PieChart_card = dbc.Card([
+    dcc.Graph(
+        id='top-10-hashtags-pie',
+        figure={
+            'data': [
+                go.Pie(labels=top_10_hashtags.index,
+                    values=top_10_hashtags.values, hole=0.5)
+            ],
+            'layout': go.Layout(title='Top 10 Hashtags')
+        }
+    )
+])
+#---- Made the cards, now we make a tab for them ----
+graph_tabs = dcc.Tabs(
+    [
+        dcc.Tab(BarChart_card, label=("Bar Graph")),
+        dcc.Tab(LineGraph_card, label=("Line Graph")),
+        dcc.Tab(AreaGraph_card, label=("Area Graph")),
+        dcc.Tab(PieChart_card, label=("Pie Chart")),
+    ]
+)
+#-------------------- TABS FOR THE GRAPH HAVE BEEN MADE --------------------
+
+
 #Making the dash Web Page layout from here, the app variable is used for initializing the app, and then we set some parameters for our bar chart and then
 #we move on to the app.layout variable which is being used as something similar to HTML,
 #documentation for the different methods used can be found on plotly,dash and dash-bootstrap-components' respective documentations
@@ -276,12 +260,6 @@ tabs = dcc.Tabs(
 
 # Initialize the app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-bar_chart = px.bar(top_5_hashtags, x='hashtag', y='likes',
-                   color_discrete_sequence=[bar_color])
-bar_chart.update_yaxes(title_text="No of occurences")
-# App layout, below column width is for "width" parameter used for the hashtags part which i have commented so this isn't really being used but if you want to
-#change anything back then you can keep this in mind
-column_width = "auto"
 
 app.layout = html.Div([
     dbc.Row([dbc.Col([html.Header(style={'background-color': '#000', 'color': '#fff', 'text-align': 'center', 'padding': '20px', 'margin': '0'},
@@ -295,60 +273,29 @@ app.layout = html.Div([
    
     # Add the LinkedIn logo and align it to the left
     dbc.Row([html.Img(src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjoFrGy1SjTOXrd0EbOvODvgiI0dVRY2bESA&usqp=CAU',
-             style={'width': '300px','margin-top': '40px','margin-left': '70px' }),], ), #added  a margin here as well ------------------------------
+             style={'width': '300px','margin-top': '40px','margin-left': '70px' }),], ), 
+    
+#-------- Adding Graphs to the Program --------
+    dbc.Row([
+        dbc.Col(graph_tabs),
+    ],
+    style={ 'margin': '20px'}
+    ),
+#-------- End --------
 
-    #the bar graph is added here
-    dbc.Row([dcc.Graph(
-        figure=bar_chart,
-        # Adjust the margin-top value as needed
-        style={ }
-    ),], ),
-       dbc.Row([dcc.Graph(
-        figure=px.line(top_5_hashtags, x='hashtag', y='likes',),
-        # Adjust the margin-top value as needed
-        style={ }
-    ),], ),
-      
-       dbc.Row([dcc.Graph(
-        figure=px.area(top_5_hashtags, x='hashtag', y='likes',),
-        # Adjust the margin-top value as needed
-        style={ }
-    ),], ),
 
-#the pie chart is added here
- dbc.Row([   
-        dcc.Graph(
-            id='top-10-hashtags-pie',
-            figure={
-                'data': [
-                    go.Pie(labels=top_10_hashtags.index,
-                        values=top_10_hashtags.values, hole=0.5)
-                ],
-                'layout': go.Layout(title='Top 10 Hashtags')
-            }
-        )
-    ], 
-    justify="around"),
-#the Code under here is for a few cards i mentioned earlier when i talked about the column_width variable
 
-# dbc.Row([dbc.Col(card,width=column_width),dbc.Col(card1,width=column_width ),dbc.Col(card2,width=column_width ),dbc.Col(card3,width=column_width),dbc.Col(card4, width=column_width)],justify="evenly"),
+dbc.Row([html.H5('Top 5 Posts of Each Hashtag')],style={'margin-left': '120px','margin-bottom': '40px'}),
 
-#    dbc.Row([dbc.Col(card2, )
-#             ], justify="around"),
-#    dbc.Row([dbc.Col(card3,),
-#             ], justify="around"),
-#    dbc.Row([dbc.Col(card4, ),
-#             ], justify="around"),
-
-#-------- Added Margins Over here as well --------
-dbc.Row([html.H5('Top 5 Posts of Each Hashtag')],style={ 'margin': '70px'}),
-
+#-------- Added Links Tabs here --------
 dbc.Row([
     dbc.Col(tabs),
 ],
-style={ 'margin': '70px'}
+style={ 'margin-left': '120px','margin-right': '120px','margin-bottom': '120px'}
 ),
 #-------- End --------
+
+
 dbc.Row([
     dbc.Col(  html.Footer(style={'background-color': '#000', 'color': '#fff', 'text-align': 'center', 'padding': '10px', 'position': 'relative', 'bottom': '0', 'left': '0', 'width': '100%'},
                 children=[
